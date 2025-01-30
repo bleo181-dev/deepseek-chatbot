@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    networks:
+      - chat-ui
+  ollama-service:
+    image: ollama/ollama
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama:/root/.ollama
+    networks:
+      - chat-ui
+  chat-ui:
+    image: ghcr.io/huggingface/chat-ui-db:latest
+    volumes:
+      - ./db:/data
+      - .env.local:/app/.env.local
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - HF_TOKEN=abc
+    ports:
+      - 4000:3000
+    depends_on:
+      - mongodb
+    networks:
+      - chat-ui
+
+networks:
+  chat-ui:
+    driver: bridge

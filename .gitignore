@@ -1,0 +1,6 @@
+# Ignore MongoDB data directory
+db/
+
+# Ignore Ollama model and data directory
+ollama/
+
